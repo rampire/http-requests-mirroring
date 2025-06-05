@@ -34,6 +34,8 @@ import (
 	"github.com/google/gopacket/tcpassembly/tcpreader"
 )
 
+
+var pktSource = flag.String("source", "vxlan0", "Source interface.")
 var fwdDestination = flag.String("destination", "", "Destination of the forwarded requests.")
 var fwdPerc = flag.Float64("percentage", 100, "Must be between 0 and 100.")
 var fwdBy = flag.String("percentage-by", "", "Can be empty. Otherwise, valid values are: header, remoteaddr.")
@@ -208,8 +210,8 @@ func main() {
 	}
 
 	// Set up pcap packet capture
-	log.Printf("Starting capture on interface vxlan0")
-	handle, err = pcap.OpenLive("vxlan0", 8951, true, pcap.BlockForever)
+	log.Srintf("%s%s","Starting capture on interface ", *pktSource)
+	handle, err = pcap.OpenLive(*pktSource, 8951, true, pcap.BlockForever)
 	if err != nil {
 		log.Fatal(err)
 	}
